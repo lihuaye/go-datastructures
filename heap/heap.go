@@ -27,14 +27,13 @@ func (s *slice) LeftChild(index int) (int, bool) {
 }
 
 func (s *slice) RightChild(index int) (int, bool) {
-	right := index*2 + 1
+	right := index*2 + 2
 	return right, right < len(*s)
 }
 
 type Heap interface {
 	Pop() (Item, error)
 	Push(Item)
-	Delete(Item)
 	IsEmpty() bool
 	Len() int
 }

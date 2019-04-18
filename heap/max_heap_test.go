@@ -3,6 +3,7 @@ package heap
 import (
 	"fmt"
 	. "github.com/smartystreets/goconvey/convey"
+	"math/rand"
 	"testing"
 )
 
@@ -134,4 +135,21 @@ func TestMaxHeap_Len(t *testing.T) {
 			})
 		})
 	})
+}
+
+func BenchmarkMaxHeap(b *testing.B) {
+	heap := NewMaxHeap(10)
+
+	b.StartTimer()
+
+	for i := 0; i < b.N; i++ {
+		heap.Push(TestItem(rand.Intn(b.N)))
+		heap.Push(TestItem(rand.Intn(b.N)))
+		heap.Push(TestItem(rand.Intn(b.N)))
+		heap.Push(TestItem(rand.Intn(b.N)))
+		_, _ = heap.Pop()
+	}
+
+	b.StopTimer()
+
 }

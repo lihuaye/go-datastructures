@@ -38,12 +38,6 @@ func (mh *maxHeap) Push(item Item) {
 	mh.shiftUp(mh.Len() - 1)
 }
 
-func (mh *maxHeap) Delete(Item) {
-	mh.mu.Lock()
-	defer mh.mu.Unlock()
-
-}
-
 func (mh *maxHeap) IsEmpty() bool {
 	mh.mu.RLock()
 	defer mh.mu.RUnlock()
