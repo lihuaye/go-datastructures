@@ -31,6 +31,15 @@ func (s *slice) RightChild(index int) (int, bool) {
 	return right, right < len(*s)
 }
 
+func (s *slice) GetParent(index int) (int, bool) {
+	parent := (index - 1) / 2
+	return parent, parent >= 0 && parent < len(*s)
+}
+
+func (s *slice) IsLeftChild(index int) bool {
+	return index%2 != 0
+}
+
 type Heap interface {
 	Pop() (Item, error)
 	Push(Item)

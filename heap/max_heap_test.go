@@ -3,7 +3,6 @@ package heap
 import (
 	"fmt"
 	. "github.com/smartystreets/goconvey/convey"
-	"math/rand"
 	"testing"
 )
 
@@ -137,19 +136,56 @@ func TestMaxHeap_Len(t *testing.T) {
 	})
 }
 
-func BenchmarkMaxHeap(b *testing.B) {
-	heap := NewMaxHeap(10)
+func TestNewMaxHeapify(t *testing.T) {
+	items := []Item{TestItem(1), TestItem(32), TestItem(12), TestItem(43), TestItem(54), TestItem(13), TestItem(41), TestItem(39)}
+	Convey("Init heap by items:[1,32,12,43,54,13,41,39]", t, func() {
+		heap := NewMaxHeapify(items)
+		mh := heap.(*maxHeap)
+		Convey("now heap is [54,43,41,39,32,13,12,1]", func() {
+			So(fmt.Sprint(mh.slice), ShouldEqual, fmt.Sprint([]int{54, 43, 41, 39, 32, 13, 12, 1}))
+		})
+	})
 
+	Convey("Init heap by items:[1,32,12,43,54,13,41,39,3]", t, func() {
+		heap := NewMaxHeapify(append(items, TestItem(3)))
+		mh := heap.(*maxHeap)
+		Convey("now heap is [54,43,41,39,32,13,12,1,3]", func() {
+			So(fmt.Sprint(mh.slice), ShouldEqual, fmt.Sprint([]int{54, 43, 41, 39, 32, 13, 12, 1, 3}))
+		})
+	})
+
+}
+
+func BenchmarkNewMaxHeap(b *testing.B) {
 	b.StartTimer()
-
 	for i := 0; i < b.N; i++ {
-		heap.Push(TestItem(rand.Intn(b.N)))
-		heap.Push(TestItem(rand.Intn(b.N)))
-		heap.Push(TestItem(rand.Intn(b.N)))
-		heap.Push(TestItem(rand.Intn(b.N)))
-		_, _ = heap.Pop()
+		heap := NewMaxHeap(8)
+		heap.Push(TestItem(1))
+		heap.Push(TestItem(32))
+		heap.Push(TestItem(12))
+		heap.Push(TestItem(43))
+		heap.Push(TestItem(54))
+		heap.Push(TestItem(13))
+		heap.Push(TestItem(41))
+		heap.Push(TestItem(39))
 	}
-
 	b.StopTimer()
+}
 
+func BenchmarkNewMaxHeapify(b *testing.B) {
+	arr := []Item{
+		TestItem(1),
+		TestItem(32),
+		TestItem(12),
+		TestItem(43),
+		TestItem(54),
+		TestItem(13),
+		TestItem(41),
+		TestItem(39),
+	}
+	b.StartTimer()
+	for i := 0; i < b.N; i++ {
+		_ = NewMaxHeapify(arr)
+	}
+	b.StopTimer()
 }

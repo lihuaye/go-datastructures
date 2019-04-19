@@ -2,6 +2,14 @@ package heap
 
 import "sync"
 
+func NewMaxHeapify(array []Item) Heap {
+	heap := &maxHeap{
+		slice: make(slice, len(array)),
+	}
+	heap.heapify(array)
+	return heap
+}
+
 func NewMaxHeap(capacity int) Heap {
 	return &maxHeap{
 		slice: make(slice, 0, capacity),
@@ -11,6 +19,14 @@ func NewMaxHeap(capacity int) Heap {
 type maxHeap struct {
 	mu    sync.RWMutex
 	slice slice
+}
+
+func (mh *maxHeap) heapify(array []Item) {
+	copy(mh.slice, array)
+
+	for i := mh.Len()/2 - 1; i >= 0; i-- {
+		mh.shiftDown(i)
+	}
 }
 
 func (mh *maxHeap) Pop() (Item, error) {
